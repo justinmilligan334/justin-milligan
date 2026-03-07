@@ -1,0 +1,533 @@
+---
+import Layout from '~/layouts/PageLayout.astro';
+import Header from '~/components/widgets/Header.astro';
+
+const metadata = {
+  title: 'PriceRX — Drug Price Lookup',
+  description: 'Look up prescription drug prices. Real wholesale and retail pricing from NADAC and Cost Plus Drugs.',
+};
+---
+
+<Layout metadata={metadata}>
+  <Fragment slot="header">
+    <Header
+      links={[
+        { text: 'Home', href: '/' },
+        { text: 'Photos', href: '/#photos' },
+        { text: 'Writing', href: '/#writing' },
+        { text: 'Projects', href: '/#projects' },
+        { text: 'Work', href: '/#work' },
+      ]}
+      isSticky
+      showToggleTheme
+    />
+  </Fragment>
+
+  <!-- ============================================ -->
+  <!-- HERO                                          -->
+  <!-- ============================================ -->
+  <section class="pt-24 pb-12 sm:pt-32 sm:pb-16">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 text-center">
+      <p class="text-xs uppercase tracking-[0.3em] text-muted mb-3">Tool</p>
+      <h1 class="text-5xl sm:text-6xl font-heading font-bold italic mb-4">PriceRX</h1>
+      <p class="text-base text-muted max-w-md mx-auto font-light leading-relaxed">
+        Look up any drug and see what it actually costs. Real pricing from federal databases and discount pharmacies.
+      </p>
+    </div>
+  </section>
+
+  <!-- ============================================ -->
+  <!-- SEARCH                                        -->
+  <!-- ============================================ -->
+  <section class="pb-8">
+    <div class="max-w-xl mx-auto px-4 sm:px-6">
+      <div id="rx-search-container" class="relative">
+        <div class="relative">
+          <svg class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/30 pointer-events-none" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+          </svg>
+          <input
+            id="rx-search"
+            type="text"
+            placeholder="Search a drug — e.g. metformin, advil, insulin..."
+            autocomplete="off"
+            class="w-full pl-12 pr-4 py-4 rounded-xl bg-white/5 border border-white/10 text-white placeholder:text-white/30 text-base focus:outline-none focus:border-amber-400/50 focus:ring-2 focus:ring-amber-400/20 transition-all"
+          />
+        </div>
+
+        <!-- Suggestions dropdown -->
+        <div id="rx-suggestions" class="absolute z-50 left-0 right-0 mt-2 rounded-xl bg-gray-900 border border-white/10 shadow-2xl overflow-hidden hidden">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================ -->
+  <!-- LOADING                                       -->
+  <!-- ============================================ -->
+  <div id="rx-loading" class="hidden py-16 text-center">
+    <div class="inline-flex items-center gap-3 text-white/40 text-sm">
+      <svg class="animate-spin w-5 h-5" fill="none" viewBox="0 0 24 24">
+        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+      </svg>
+      Looking up prices...
+    </div>
+  </div>
+
+  <!-- ============================================ -->
+  <!-- RESULTS                                       -->
+  <!-- ============================================ -->
+  <section id="rx-results" class="hidden pb-20">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6">
+      <div id="rx-results-header" class="mb-10"></div>
+
+      <!-- NADAC section -->
+      <div id="rx-nadac-section" class="hidden mb-12">
+        <div id="rx-nadac-header" class="flex items-center gap-3 mb-5"></div>
+        <div id="rx-nadac-grid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+      </div>
+
+      <!-- Cost Plus section -->
+      <div id="rx-costplus-section" class="hidden mb-12">
+        <div id="rx-costplus-header" class="flex items-center gap-3 mb-5"></div>
+        <div id="rx-costplus-grid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+      </div>
+
+      <!-- Compare links -->
+      <div id="rx-compare" class="text-center mt-8">
+        <p class="text-xs text-white/25 mb-4">Compare on other platforms</p>
+        <div class="flex flex-wrap justify-center gap-3" id="rx-compare-links"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================ -->
+  <!-- NO RESULTS                                    -->
+  <!-- ============================================ -->
+  <div id="rx-no-results" class="hidden pb-20">
+    <div class="max-w-lg mx-auto px-4 sm:px-6 text-center">
+      <div class="rounded-2xl bg-white/[0.02] border border-white/5 p-8">
+        <p class="text-white/50 text-sm mb-4" id="rx-no-results-text"></p>
+        <div class="flex flex-wrap justify-center gap-3">
+          <a id="rx-goodrx-link" href="#" target="_blank" rel="noopener" class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-white/5 border border-white/10 text-xs font-medium text-white/60 hover:text-white hover:border-white/20 transition-all">
+            Search on GoodRx &rarr;
+          </a>
+          <a href="https://www.trumprx.gov" target="_blank" rel="noopener" class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-white/5 border border-white/10 text-xs font-medium text-white/60 hover:text-white hover:border-white/20 transition-all">
+            Check TrumpRx.gov &rarr;
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================ -->
+  <!-- ERROR                                         -->
+  <!-- ============================================ -->
+  <div id="rx-error" class="hidden pb-20">
+    <div class="max-w-lg mx-auto px-4 sm:px-6 text-center">
+      <div class="rounded-2xl bg-red-400/5 border border-red-400/10 p-8">
+        <p class="text-red-400/70 text-sm">Something went wrong. Please try again.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================ -->
+  <!-- DISCLAIMER                                    -->
+  <!-- ============================================ -->
+  <section class="pb-20">
+    <div class="max-w-lg mx-auto px-4 sm:px-6 text-center">
+      <p class="text-[11px] text-white/20 leading-relaxed">
+        NADAC prices are average pharmacy acquisition costs published by CMS — what pharmacies pay wholesalers, not what consumers pay at the counter.
+        Cost Plus Drugs prices are direct consumer prices. This tool is for informational purposes only and is not medical advice.
+        Always consult your healthcare provider and pharmacist.
+      </p>
+    </div>
+  </section>
+
+  <script is:inline>
+    // =============================================
+    // PriceRX — Drug Price Lookup
+    // Uses: RxNorm (autocomplete), NADAC (pharmacy costs), Cost Plus Drugs (consumer prices)
+    // =============================================
+
+    var RXNORM = 'https://rxnav.nlm.nih.gov/REST';
+    var COSTPLUS = 'https://us-central1-costplusdrugs-publicapi.cloudfunctions.net/main';
+    // NADAC 2025 dataset UUID — update annually from https://data.medicaid.gov
+    var NADAC_DATASET = 'f38d0706-1239-442c-a3cc-40ef1b686ac0';
+    var NADAC = 'https://data.medicaid.gov/api/1/datastore/query/' + NADAC_DATASET + '/0';
+
+    function init() {
+      var searchInput = document.getElementById('rx-search');
+      var suggestionsEl = document.getElementById('rx-suggestions');
+      var resultsEl = document.getElementById('rx-results');
+      var resultsHeader = document.getElementById('rx-results-header');
+      var nadacSection = document.getElementById('rx-nadac-section');
+      var nadacHeader = document.getElementById('rx-nadac-header');
+      var nadacGrid = document.getElementById('rx-nadac-grid');
+      var costplusSection = document.getElementById('rx-costplus-section');
+      var costplusHeader = document.getElementById('rx-costplus-header');
+      var costplusGrid = document.getElementById('rx-costplus-grid');
+      var compareLinks = document.getElementById('rx-compare-links');
+      var loadingEl = document.getElementById('rx-loading');
+      var errorEl = document.getElementById('rx-error');
+      var noResultsEl = document.getElementById('rx-no-results');
+      var noResultsText = document.getElementById('rx-no-results-text');
+      var goodrxLink = document.getElementById('rx-goodrx-link');
+
+      if (!searchInput) return;
+
+      var activeIdx = -1;
+      var suggestions = [];
+
+      // -- Utilities --
+      function debounce(fn, ms) {
+        var t;
+        return function() {
+          var args = arguments;
+          clearTimeout(t);
+          t = setTimeout(function() { fn.apply(null, args); }, ms);
+        };
+      }
+
+      function fetchJSON(url) {
+        var ctrl = new AbortController();
+        var timer = setTimeout(function() { ctrl.abort(); }, 12000);
+        return fetch(url, { signal: ctrl.signal })
+          .then(function(r) { clearTimeout(timer); return r.ok ? r.json() : null; })
+          .catch(function() { clearTimeout(timer); return null; });
+      }
+
+      function escapeHtml(s) {
+        var d = document.createElement('div');
+        d.textContent = s;
+        return d.innerHTML;
+      }
+
+      function formatPrice(p) {
+        var num = parseFloat(String(p).replace('$', ''));
+        if (isNaN(num)) return '\u2014';
+        return '$' + num.toFixed(2);
+      }
+
+      function formatNADACPrice(p) {
+        var num = parseFloat(p);
+        if (isNaN(num)) return '\u2014';
+        if (num < 0.01) return '$' + num.toFixed(4);
+        if (num < 1) return '$' + num.toFixed(3);
+        return '$' + num.toFixed(2);
+      }
+
+      function formatDrugName(desc) {
+        if (!desc) return '';
+        var keep = ['HCL','MG','ML','MCG','ER','XR','XL','CR','SR','DR','IR','LA','SA','HFA','HCT','EC','ODT','TAB','CAP','USP','GM','GR'];
+        return desc.split(' ').map(function(w) {
+          if (keep.indexOf(w.toUpperCase()) >= 0) return w.toUpperCase();
+          if (/^\d/.test(w)) return w;
+          return w.charAt(0).toUpperCase() + w.slice(1).toLowerCase();
+        }).join(' ');
+      }
+
+      function unitLabel(u) {
+        if (!u) return 'unit';
+        var map = { EA: 'unit', ML: 'mL', GM: 'gram', GR: 'gram' };
+        return map[u.toUpperCase()] || u.toLowerCase();
+      }
+
+      // -- UI Helpers --
+      function hideAll() {
+        resultsEl.classList.add('hidden');
+        loadingEl.classList.add('hidden');
+        errorEl.classList.add('hidden');
+        noResultsEl.classList.add('hidden');
+        nadacSection.classList.add('hidden');
+        costplusSection.classList.add('hidden');
+      }
+
+      function showLoading() { hideAll(); loadingEl.classList.remove('hidden'); }
+      function showError() { hideAll(); errorEl.classList.remove('hidden'); }
+
+      function showNoResults(name) {
+        hideAll();
+        noResultsText.textContent = 'No pricing data found for \u201c' + name + '.\u201d Try a different name or check these resources:';
+        goodrxLink.href = 'https://www.goodrx.com/search?search=' + encodeURIComponent(name);
+        noResultsEl.classList.remove('hidden');
+      }
+
+      // -- Suggestions --
+      function showSuggestions(items) {
+        suggestions = items;
+        activeIdx = -1;
+        if (items.length === 0) { hideSuggestions(); return; }
+        suggestionsEl.innerHTML = items.map(function(item, i) {
+          var badge = (item.tty === 'IN' || item.tty === 'PIN' || item.tty === 'MIN') ? 'generic' : (item.tty || '');
+          return '<button data-idx="' + i + '" class="w-full text-left px-4 py-3 text-sm text-white/70 hover:bg-white/5 hover:text-white transition-colors border-b border-white/5 last:border-0 flex items-center justify-between">' +
+            '<span>' + escapeHtml(item.name) + '</span>' +
+            '<span class="text-[10px] uppercase tracking-wider text-white/20">' + badge + '</span>' +
+          '</button>';
+        }).join('');
+        suggestionsEl.classList.remove('hidden');
+
+        suggestionsEl.querySelectorAll('button').forEach(function(btn) {
+          btn.addEventListener('click', function() {
+            selectSuggestion(suggestions[parseInt(btn.dataset.idx)]);
+          });
+        });
+      }
+
+      function hideSuggestions() {
+        suggestionsEl.classList.add('hidden');
+        suggestions = [];
+        activeIdx = -1;
+      }
+
+      function highlightSuggestion(idx) {
+        var btns = suggestionsEl.querySelectorAll('button');
+        btns.forEach(function(b, i) {
+          b.classList.toggle('bg-white/5', i === idx);
+          b.classList.toggle('text-white', i === idx);
+        });
+        activeIdx = idx;
+      }
+
+      // -- RxNorm Autocomplete --
+      function searchDrugs(term) {
+        return fetchJSON(RXNORM + '/approximateTerm.json?term=' + encodeURIComponent(term) + '&maxEntries=20')
+          .then(function(data) {
+            var candidates = (data && data.approximateGroup && data.approximateGroup.candidate) || [];
+            var seen = {};
+            var unique = [];
+            for (var i = 0; i < candidates.length; i++) {
+              var c = candidates[i];
+              if (!seen[c.rxcui]) { seen[c.rxcui] = true; unique.push(c); }
+            }
+            unique = unique.slice(0, 8);
+            return Promise.all(unique.map(function(c) {
+              return fetchJSON(RXNORM + '/rxcui/' + c.rxcui + '/properties.json').then(function(props) {
+                return {
+                  rxcui: c.rxcui,
+                  name: (props && props.properties && props.properties.name) || 'Unknown',
+                  tty: (props && props.properties && props.properties.tty) || '',
+                };
+              });
+            }));
+          })
+          .then(function(results) {
+            var ingredients = results.filter(function(r) { return ['IN','PIN','MIN'].indexOf(r.tty) >= 0; });
+            return ingredients.length > 0 ? ingredients : results.slice(0, 5);
+          });
+      }
+
+      // -- NADAC (National Average Drug Acquisition Cost) --
+      function getNADACPrices(drugName) {
+        var mainWord = drugName.trim().split(/\s+/)[0].toUpperCase();
+        var url = NADAC +
+          '?conditions[0][property]=ndc_description' +
+          '&conditions[0][value]=%25' + encodeURIComponent(mainWord) + '%25' +
+          '&conditions[0][operator]=LIKE' +
+          '&sort[0][property]=as_of_date&sort[0][order]=desc' +
+          '&limit=100&offset=0';
+
+        return fetchJSON(url).then(function(data) {
+          if (!data || !data.results || !data.results.length) return [];
+
+          // Keep only the latest weekly snapshot
+          var latestDate = data.results[0].as_of_date;
+          var current = data.results.filter(function(r) { return r.as_of_date === latestDate; });
+
+          // Group by ndc_description, keep cheapest per formulation
+          var byDesc = {};
+          for (var i = 0; i < current.length; i++) {
+            var r = current[i];
+            var key = r.ndc_description;
+            var price = parseFloat(r.nadac_per_unit);
+            if (!byDesc[key] || price < parseFloat(byDesc[key].nadac_per_unit)) {
+              byDesc[key] = r;
+            }
+          }
+
+          // Sort by price ascending
+          var entries = Object.values(byDesc);
+          entries.sort(function(a, b) { return parseFloat(a.nadac_per_unit) - parseFloat(b.nadac_per_unit); });
+          return entries.slice(0, 15);
+        });
+      }
+
+      // -- Cost Plus Drugs --
+      function getCostPlusPrices(name) {
+        return fetchJSON(COSTPLUS + '?medication_name=' + encodeURIComponent(name))
+          .then(function(data) {
+            if (!data) return [];
+            var results = Array.isArray(data) ? data : (data.results || []);
+            return results.filter(function(r) { return !r.error_message; });
+          });
+      }
+
+      // -- Render Results --
+      function renderResults(nadac, costPlus, drugName) {
+        hideAll();
+
+        // Header
+        resultsHeader.innerHTML =
+          '<div class="text-center">' +
+            '<p class="text-xs uppercase tracking-[0.25em] text-white/30 mb-2">Prices for</p>' +
+            '<h2 class="text-2xl sm:text-3xl font-heading font-bold italic text-white/80 capitalize">' + escapeHtml(drugName) + '</h2>' +
+          '</div>';
+
+        // NADAC cards
+        if (nadac.length > 0) {
+          nadacHeader.innerHTML =
+            '<h3 class="text-sm font-medium text-white/40 whitespace-nowrap">Pharmacy Costs</h3>' +
+            '<div class="flex-1 h-px bg-white/5"></div>' +
+            '<span class="text-[10px] uppercase tracking-wider text-white/20 whitespace-nowrap">NADAC \u00b7 CMS</span>';
+
+          nadacGrid.innerHTML = nadac.map(function(r) {
+            var price = formatNADACPrice(r.nadac_per_unit);
+            var isGeneric = r.classification_for_rate_setting === 'G';
+            var badgeClass = isGeneric
+              ? 'bg-emerald-400/10 border border-emerald-400/20 text-emerald-400'
+              : 'bg-purple-400/10 border border-purple-400/20 text-purple-400';
+            var badgeText = isGeneric ? 'Generic' : 'Brand';
+
+            return '' +
+              '<div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-gray-900 to-gray-800 border border-white/5 hover:border-emerald-400/15 transition-all duration-300">' +
+                '<div class="relative z-10 p-5">' +
+                  '<div class="flex items-start justify-between mb-3">' +
+                    '<span class="inline-flex px-2 py-0.5 rounded text-[9px] uppercase tracking-widest ' + badgeClass + '">' + badgeText + '</span>' +
+                  '</div>' +
+                  '<p class="text-[13px] font-medium text-white/60 mb-4 leading-snug">' + escapeHtml(formatDrugName(r.ndc_description)) + '</p>' +
+                  '<div>' +
+                    '<p class="text-[10px] uppercase tracking-[0.2em] text-white/25 mb-1">Avg. pharmacy cost</p>' +
+                    '<p class="text-2xl font-bold text-emerald-400">' + price + '</p>' +
+                    '<p class="text-[10px] text-white/20 mt-0.5">per ' + unitLabel(r.pricing_unit) + '</p>' +
+                  '</div>' +
+                '</div>' +
+              '</div>';
+          }).join('');
+
+          nadacSection.classList.remove('hidden');
+        }
+
+        // Cost Plus cards
+        if (costPlus.length > 0) {
+          costplusHeader.innerHTML =
+            '<h3 class="text-sm font-medium text-white/40 whitespace-nowrap">Buy Direct</h3>' +
+            '<div class="flex-1 h-px bg-white/5"></div>' +
+            '<span class="text-[10px] uppercase tracking-wider text-amber-400/40 whitespace-nowrap">Cost Plus Drugs</span>';
+
+          costplusGrid.innerHTML = costPlus.map(function(r) {
+            var price = r.unit_price ? formatPrice(r.unit_price) : '\u2014';
+            var cpUrl = r.url || ('https://costplusdrugs.com/medications/' + (r.slug || ''));
+
+            return '' +
+              '<div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-gray-900 to-gray-800 border border-white/5 hover:border-amber-400/20 transition-all duration-300">' +
+                '<div class="absolute top-0 left-0 w-24 h-24 bg-amber-400/10 rounded-full blur-2xl"></div>' +
+                '<div class="relative z-10 p-5">' +
+                  '<div class="flex items-start justify-between mb-3">' +
+                    '<div>' +
+                      '<p class="text-[10px] uppercase tracking-[0.2em] text-white/25 mb-1">' + escapeHtml(r.form || 'Medication') + '</p>' +
+                      '<p class="text-sm font-medium text-white/60">' + escapeHtml(r.strength || '') + '</p>' +
+                    '</div>' +
+                    '<span class="inline-flex px-2 py-0.5 rounded bg-amber-400/10 border border-amber-400/20 text-[9px] uppercase tracking-widest text-amber-400">Cost Plus</span>' +
+                  '</div>' +
+                  '<div class="mb-4">' +
+                    '<p class="text-[10px] uppercase tracking-[0.2em] text-white/25 mb-1">Price per unit</p>' +
+                    '<p class="text-2xl font-bold text-amber-400">' + price + '</p>' +
+                  '</div>' +
+                  '<a href="' + cpUrl + '" target="_blank" rel="noopener" class="inline-flex items-center gap-1.5 text-xs font-medium text-amber-400/70 hover:text-amber-400 transition-colors">' +
+                    'Buy on Cost Plus &rarr;' +
+                  '</a>' +
+                '</div>' +
+              '</div>';
+          }).join('');
+
+          costplusSection.classList.remove('hidden');
+        }
+
+        // Compare links
+        compareLinks.innerHTML =
+          '<a href="https://www.goodrx.com/search?search=' + encodeURIComponent(drugName) + '" target="_blank" rel="noopener" class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-white/5 border border-white/10 text-xs font-medium text-white/50 hover:text-white hover:border-white/20 transition-all">GoodRx &rarr;</a>' +
+          '<a href="https://www.trumprx.gov" target="_blank" rel="noopener" class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-white/5 border border-white/10 text-xs font-medium text-white/50 hover:text-white hover:border-white/20 transition-all">TrumpRx.gov &rarr;</a>';
+
+        resultsEl.classList.remove('hidden');
+      }
+
+      // -- Select Suggestion --
+      function selectSuggestion(s) {
+        searchInput.value = s.name;
+        hideSuggestions();
+        showLoading();
+
+        // Fetch from both sources in parallel
+        Promise.all([
+          getNADACPrices(s.name),
+          getCostPlusPrices(s.name),
+        ]).then(function(results) {
+          var nadac = results[0];
+          var costPlus = results[1];
+
+          // If Cost Plus found nothing, try the first word (base ingredient)
+          if (costPlus.length === 0) {
+            var base = s.name.split(' ')[0];
+            if (base !== s.name) {
+              return getCostPlusPrices(base).then(function(cp) {
+                return [nadac, cp];
+              });
+            }
+          }
+          return [nadac, costPlus];
+        }).then(function(both) {
+          var nadac = both[0];
+          var costPlus = both[1];
+
+          if (nadac.length > 0 || costPlus.length > 0) {
+            renderResults(nadac, costPlus, s.name);
+          } else {
+            showNoResults(s.name);
+          }
+        }).catch(function() {
+          showError();
+        });
+      }
+
+      // -- Event Handlers --
+      var handleInput = debounce(function(e) {
+        var term = e.target.value.trim();
+        if (term.length < 2) { hideSuggestions(); return; }
+        searchDrugs(term).then(function(items) { showSuggestions(items); });
+      }, 350);
+
+      searchInput.addEventListener('input', handleInput);
+
+      searchInput.addEventListener('keydown', function(e) {
+        var btns = suggestionsEl.querySelectorAll('button');
+        if (!btns.length) return;
+
+        if (e.key === 'ArrowDown') {
+          e.preventDefault();
+          highlightSuggestion(activeIdx < btns.length - 1 ? activeIdx + 1 : 0);
+        } else if (e.key === 'ArrowUp') {
+          e.preventDefault();
+          highlightSuggestion(activeIdx > 0 ? activeIdx - 1 : btns.length - 1);
+        } else if (e.key === 'Enter') {
+          e.preventDefault();
+          if (activeIdx >= 0 && suggestions[activeIdx]) selectSuggestion(suggestions[activeIdx]);
+        } else if (e.key === 'Escape') {
+          hideSuggestions();
+        }
+      });
+
+      document.addEventListener('click', function(e) {
+        if (!e.target.closest('#rx-search-container')) hideSuggestions();
+      });
+    }
+
+    // Support Astro View Transitions
+    document.addEventListener('astro:page-load', init);
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', init);
+    } else {
+      init();
+    }
+  </script>
+</Layout>
