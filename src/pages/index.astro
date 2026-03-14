@@ -1,7 +1,6 @@
 ---
 import Layout from '~/layouts/PageLayout.astro';
 import Header from '~/components/widgets/Header.astro';
-import { getPermalink } from '~/utils/permalinks';
 import { Image } from 'astro:assets';
 
 import heroBg from '~/assets/images/photos/DSC_0417.jpeg';
@@ -13,7 +12,6 @@ import photo3 from '~/assets/images/photos/IMG_1659.JPG';
 import photo4 from '~/assets/images/photos/IMG_1708.JPG';
 import photo5 from '~/assets/images/photos/IMG_1782.JPG';
 import photo6 from '~/assets/images/photos/IMG_9492.JPG';
-import resumeBg from '~/assets/images/photos/IMG_1708.JPG';
 
 const metadata = {
   title: 'Justin Milligan',
@@ -24,23 +22,31 @@ const socials = [
   { name: 'LinkedIn', href: 'https://linkedin.com/in/justinmilligan34', icon: 'linkedin' },
   { name: 'Instagram', href: 'https://instagram.com/justin_m34', icon: 'instagram' },
   { name: 'Twitter', href: 'https://x.com/justin_m34', icon: 'twitter' },
-  { name: 'Email', href: 'mailto:justin.milligan334@gmail.com', icon: 'email' },
+  { name: 'Email', href: 'mailto:jmilligan@linkstudio.ai', icon: 'email' },
 ];
 
 const photos = [
   { src: photo1, alt: 'Sunset over a lake' },
   { src: photo2, alt: 'Golden hour from a mountain summit' },
+  { src: photo6, alt: 'Niagara Falls with a friend' },
   { src: photo3, alt: 'Mountain goat on an alpine ridge' },
   { src: photo4, alt: 'Alpine lake beneath towering peaks' },
   { src: photo5, alt: 'Chipmunk snacking on a rock' },
-  { src: photo6, alt: 'Niagara Falls with a friend' },
 ];
 
-/* ── "Now" section — swap these whenever you want ── */
-const now = [
-  { label: 'Reading', value: 'Shoe Dog', sub: 'Phil Knight', icon: 'book' },
-  { label: 'Listening', value: 'Acquired', sub: 'Podcast', icon: 'headphones' },
-  { label: 'Into', value: 'Skiing', sub: 'Season ends too fast', icon: 'mountain' },
+const linkFocus = [
+  {
+    title: 'Who I am looking for',
+    body: 'AI-native founders, technical builders, and early teams with unusual conviction and a real desire to start.',
+  },
+  {
+    title: 'What I do',
+    body: 'I help Link Studio find, recruit, and close exceptional teams who want to build their startups with us in Cambridge.',
+  },
+  {
+    title: 'How to reach me',
+    body: 'If you are thinking seriously about building, or know a team we should meet, send me a note and I will make time.',
+  },
 ];
 ---
 
@@ -50,9 +56,8 @@ const now = [
       links={[
         { text: 'Home', href: '#' },
         { text: 'Photos', href: '#photos' },
-        { text: 'Now', href: '#now' },
         { text: 'Projects', href: '#projects' },
-        { text: 'Work', href: '#work' },
+        { text: 'Link', href: '#work' },
       ]}
       isSticky
       showToggleTheme
@@ -93,11 +98,12 @@ const now = [
       <p class="text-xs uppercase tracking-[0.4em] text-white/50 mb-5 font-sans">
         personal site
       </p>
-      <h1 class="hero-gradient-name text-6xl sm:text-7xl md:text-8xl font-heading font-bold leading-[0.9] mb-8 italic">
-        Justin<br />Milligan
+      <h1 class="hero-name text-6xl sm:text-7xl md:text-8xl font-heading font-bold leading-[0.9] mb-8 italic">
+        <span class="hero-name-line">Justin</span>
+        <span class="hero-name-line hero-name-line--accent">Milligan</span>
       </h1>
       <p class="text-lg sm:text-xl text-white/50 font-light max-w-md mx-auto mb-10">
-        how did you end up here?
+        Recruiting exceptional AI founding teams to build with Link in Cambridge.
       </p>
 
       <!-- Currently at badge -->
@@ -108,8 +114,8 @@ const now = [
         class="inline-flex items-center gap-2.5 px-5 py-2.5 rounded-full border border-white/10 bg-white/5 backdrop-blur-sm hover:bg-white/10 transition-all duration-300 mb-10 group"
       >
         <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-        <span class="text-xs uppercase tracking-[0.2em] text-white/60 group-hover:text-white/80 transition-colors">Currently at</span>
-        <span class="text-sm font-semibold text-white/90 tracking-wide">Link Ventures</span>
+        <span class="text-xs uppercase tracking-[0.2em] text-white/60 group-hover:text-white/80 transition-colors">Currently with</span>
+        <span class="text-sm font-semibold text-white/90 tracking-wide">Link Studio</span>
       </a>
 
       <!-- Social icons -->
@@ -174,64 +180,6 @@ const now = [
               widths={[400, 700]}
               loading={i < 3 ? "eager" : "lazy"}
             />
-            <!-- Hover caption -->
-            <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
-              <span class="text-xs text-white/80 font-light">{photo.alt}</span>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  </section>
-
-  <!-- ============================================ -->
-  <!-- WRITING                                       -->
-  <!-- ============================================ -->
-  <section id="writing" class="py-20 sm:py-28">
-    <div class="max-w-3xl mx-auto px-4 sm:px-6">
-      <div class="text-center animate-on-scroll">
-        <p class="text-xs uppercase tracking-[0.3em] text-muted mb-3">Writing</p>
-        <h2 class="text-4xl sm:text-5xl font-heading font-bold italic mb-6">Words</h2>
-        <p class="text-base text-muted max-w-md mx-auto font-light leading-relaxed mb-2">
-          I've been collecting thoughts. Nothing worth publishing yet.
-        </p>
-        <p class="text-sm text-muted/50 italic">Check back soon.</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============================================ -->
-  <!-- NOW — what I'm currently into                 -->
-  <!-- ============================================ -->
-  <section id="now" class="py-20 sm:py-28">
-    <div class="max-w-4xl mx-auto px-4 sm:px-6">
-      <div class="text-center mb-14 animate-on-scroll">
-        <p class="text-xs uppercase tracking-[0.3em] text-muted mb-3">Now</p>
-        <h2 class="text-4xl sm:text-5xl font-heading font-bold italic mb-6">What I'm Into</h2>
-        <p class="text-sm text-muted/60 font-light">Updated March 2026</p>
-      </div>
-
-      <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
-        {now.map((item, i) => (
-          <div
-            class="relative p-6 rounded-2xl border border-white/5 bg-white/[0.02] hover:bg-white/[0.04] hover:border-white/10 transition-all duration-300 text-center animate-on-scroll"
-            style={`transition-delay: ${i * 0.12}s`}
-          >
-            <!-- Icon -->
-            <div class="flex justify-center mb-4">
-              {item.icon === 'book' && (
-                <svg class="w-5 h-5 text-amber-400/60" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" /></svg>
-              )}
-              {item.icon === 'headphones' && (
-                <svg class="w-5 h-5 text-amber-400/60" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19.114 5.636a9 9 0 010 12.728M16.463 8.288a5.25 5.25 0 010 7.424M6.75 8.25l4.72-4.72a.75.75 0 011.28.53v15.88a.75.75 0 01-1.28.53l-4.72-4.72H4.51c-.88 0-1.704-.507-1.938-1.354A9.01 9.01 0 012.25 12c0-.83.112-1.633.322-2.396C2.806 8.756 3.63 8.25 4.51 8.25H6.75z" /></svg>
-              )}
-              {item.icon === 'mountain' && (
-                <svg class="w-5 h-5 text-amber-400/60" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 20.25L9.75 3.75l4.5 9 3-4.5L20.25 20.25H3z" /></svg>
-              )}
-            </div>
-            <p class="text-[10px] uppercase tracking-[0.3em] text-amber-400/50 mb-3">{item.label}</p>
-            <p class="text-sm font-medium text-white/80 mb-1">{item.value}</p>
-            <p class="text-[11px] text-white/30">{item.sub}</p>
           </div>
         ))}
       </div>
@@ -306,78 +254,55 @@ const now = [
   <section id="work" class="py-20 sm:py-28">
     <div class="max-w-5xl mx-auto px-4 sm:px-6">
       <div class="text-center mb-14 animate-on-scroll">
-        <p class="text-xs uppercase tracking-[0.3em] text-muted mb-3">Documents</p>
-        <h2 class="text-4xl sm:text-5xl font-heading font-bold italic mb-6">Work</h2>
+        <p class="text-xs uppercase tracking-[0.3em] text-muted mb-3">At Link</p>
+        <h2 class="text-4xl sm:text-5xl font-heading font-bold italic mb-6">Building teams</h2>
+        <p class="text-base text-muted max-w-2xl mx-auto font-light leading-relaxed">
+          I am a Senior Venture Associate at Link Studio, focused on finding and recruiting exceptional AI teams to build with us in Cambridge.
+        </p>
       </div>
 
-      <div class="grid sm:grid-cols-2 gap-6">
-        <!-- Thesis Card — photo background with NBA logo -->
-        <a
-          href="/files/senior-thesis-justin-milligan.pdf"
-          target="_blank"
-          class="group relative overflow-hidden rounded-2xl min-h-[360px] flex flex-col justify-end animate-on-scroll"
+      <div class="grid lg:grid-cols-[1.2fr_0.8fr] gap-6 items-stretch">
+        <div
+          class="relative overflow-hidden rounded-[2rem] border border-white/8 bg-gradient-to-br from-stone-950 via-stone-900 to-stone-950 p-8 sm:p-10 animate-on-scroll"
           style="transition-delay: 0s"
         >
-          <!-- Photo background (mountain sunset) -->
-          <Image
-            src={photo2}
-            alt=""
-            class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-            widths={[500, 800]}
-          />
-          <!-- Dark overlay -->
-          <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-black/20"></div>
+          <div class="absolute inset-0 opacity-[0.05]" style="background-image: linear-gradient(white 1px, transparent 1px), linear-gradient(90deg, white 1px, transparent 1px); background-size: 40px 40px;"></div>
+          <div class="absolute -top-10 right-0 h-40 w-40 rounded-full bg-amber-300/10 blur-3xl"></div>
+          <div class="absolute bottom-0 left-0 h-32 w-32 rounded-full bg-emerald-300/10 blur-3xl"></div>
 
-          <!-- NBA Logo watermark -->
-          <div class="absolute top-6 right-6 opacity-15 group-hover:opacity-25 transition-opacity duration-500">
-            <svg class="w-16 h-auto" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 276.991 569.026">
-              <path fill="transparent" d="M0 0h276.991v569.026H0z"/>
-              <path d="M197.43 503.7c.497-8.029.332-10.678-.754-11.985-.824-.994-1.408-4.093-1.432-7.609-.036-5.326-.751-7.315-7.006-19.461-6.674-12.965-6.913-13.673-5.727-16.952 1.105-3.06.948-4.088-1.47-9.664-2.412-5.562-3.497-6.774-9.957-11.134-12.532-8.457-22.604-17.08-39.377-33.705-18.725-18.567-34.272-38.982-48.689-63.937-5.006-8.664-5.398-9.024-9.82-9.047-3.32-.017-7.307-2.913-7.292-5.301.004-.692-4.059-9.642-9.029-19.886-12.898-26.586-14.001-32.248-10.057-51.606 2.341-11.478 2.781-12.51 7.663-17.915 5.183-5.735 4.37-7.35-4.119-8.189-11.341-1.123-11.225-1.052-13.576-8.329-1.156-3.579-2.102-7.635-2.102-9.013 0-4.567 5.186-19.02 12.316-34.325 3.868-8.306 8.828-19.633 11.021-25.171 7.803-19.708 18.568-35.466 27.26-39.901 3.475-1.773 10.229-3.106 30.328-5.989 11.188-1.605 11.976-2.418 13.583-14.014.935-6.744.842-7.801-.924-10.661-1.274-2.06-1.962-4.976-1.962-8.314 0-4.694.263-5.277 3.021-6.703 2.666-1.378 3.021-2.085 3.021-6.017 0-9.406 1.897-14.643 7.176-19.777a88.325 88.325 0 0 0 3.67-3.77H74.065c-23.482 0-42.52 19.037-42.52 42.52v433.586c0 23.482 19.037 42.521 42.52 42.521H200.55c-.427-.941-1.319-2.465-2.354-3.974-2.878-4.189-2.846-2.718-.766-36.278z" fill="#fff"/>
-              <path d="M203.236 25.325h-36.615c.359.427.877.886 1.507 1.299 4.528 2.966 11.396 10.111 12.492 12.994 1.649 4.341 1.278 10.107-1.05 16.333-1.338 3.574-1.901 6.772-1.523 8.656.712 3.561-2.785 11.11-6.926 14.95-1.493 1.384-3.609 4.26-4.702 6.392-1.093 2.131-3.806 5.848-6.026 8.258s-3.889 5.152-3.703 6.093c.184.942 2.826 3.053 5.871 4.692 3.047 1.639 7.606 4.855 10.135 7.147 2.527 2.292 7.63 6.312 11.339 8.933 13.327 9.421 19.722 25.53 19.788 49.848.029 10.776 5.285 36.033 9.05 43.492 5.157 10.216 7.024 15.848 8.638 26.043 2.072 13.101 2.135 13.249 6.301 14.989 3.981 1.664 14.293 10.035 14.293 11.604 0 .54 1.02 2.41 2.265 4.157l1.39 1.947V67.844c-.004-23.483-19.041-42.519-42.524-42.519zm41.886 284.716c0 .51-2.242 3.379-4.981 6.377-19.104 20.9-51.799 16.244-63.801-9.09-2.904-6.132-3.207-7.672-3.207-16.335 0-8.271.366-10.345 2.698-15.323 3.729-7.956 10.847-15.244 18.628-19.076 3.54-1.742 6.646-3.504 6.898-3.916.254-.411-2.941-7.623-7.102-16.029-9.583-19.365-10.718-22.828-15.066-45.959-1.967-10.455-3.778-19.574-4.029-20.267-.805-2.229-3.618-1.36-10.575 3.264l-6.806 4.524-6.168 15.623c-3.391 8.591-6.168 16.898-6.168 18.457 0 1.755.998 3.767 2.613 5.277 4.031 3.767 5.119 6.533 11.951 30.398 5.034 17.58 6.156 22.716 5.354 24.481-.771 1.688-.271 5.393 2.047 15.171 3.408 14.388 4.679 22.013 6.268 37.606 1.611 15.829 3.315 20.844 12.486 36.75 6.097 10.571 7.969 16.943 12.25 41.693 1.964 11.357 3.947 21.354 4.408 22.214.462.86 2.457 3.971 4.435 6.91 5.438 8.083 6.259 11.802 4.304 19.58-.894 3.553-1.904 8.906-2.246 11.896-.687 5.984 1.479 20.478 3.938 26.365.831 1.987 1.282 4.482 1.005 5.546-.279 1.064.885 6.382 2.583 11.817 5.313 16.998 5.078 24.208-1.041 31.935-1.096 1.384-1.685 2.171-2.036 2.702 18.391-4.684 31.994-21.354 31.994-41.204V309.186c-.369.137-.634.466-.634.855z" fill="#C8102E"/>
-            </svg>
-          </div>
-
-          <!-- Text content -->
-          <div class="relative z-10 p-8">
-            <p class="text-[10px] uppercase tracking-[0.25em] text-white/40 mb-2">Senior Thesis</p>
-            <h3 class="text-2xl sm:text-3xl font-heading font-bold italic text-white leading-tight mb-3 group-hover:text-amber-200 transition-colors duration-300">Rethinking the Arc</h3>
-            <p class="text-xs text-white/50 leading-relaxed mb-5 max-w-sm">
-              An Econometric and Game-Theoretical Analysis of the NBA's Three-Point Reliance and Proposed Rule Changes
+          <div class="relative z-10">
+            <p class="text-[10px] uppercase tracking-[0.3em] text-amber-300/60 mb-4">Senior Venture Associate</p>
+            <h3 class="text-3xl sm:text-4xl font-heading font-bold italic text-white/95 leading-tight mb-5">
+              Recruiting exceptional AI teams to build in Cambridge.
+            </h3>
+            <p class="text-base text-white/65 font-light leading-relaxed max-w-xl mb-6">
+              My role sits at the intersection of venture, talent, and relationship-building across universities and technical ecosystems. I spend my time meeting ambitious builders, helping them understand what Link can offer, and trying to bring the right teams into the studio.
             </p>
-            <span class="inline-flex items-center gap-2 text-xs font-medium uppercase tracking-wider text-amber-400 group-hover:text-amber-300 transition-colors">
-              Read PDF
-              <svg class="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25"/></svg>
-            </span>
-          </div>
-        </a>
+            <p class="text-sm text-white/45 font-light leading-relaxed max-w-xl mb-8">
+              If you are working on something serious in AI, thinking about starting, or know a team that should be in the room, I would love to hear from you.
+            </p>
 
-        <!-- Resume Card — photo background -->
-        <a
-          href="/files/justin-milligan-resume.docx"
-          target="_blank"
-          class="group relative overflow-hidden rounded-2xl min-h-[360px] flex flex-col justify-end animate-on-scroll"
-          style="transition-delay: 0.12s"
-        >
-          <!-- Photo background -->
-          <Image
-            src={resumeBg}
-            alt=""
-            class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-            widths={[500, 800]}
-          />
-          <!-- Gradient overlay -->
-          <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-black/10"></div>
-
-          <!-- Text content -->
-          <div class="relative z-10 p-8">
-            <p class="text-[10px] uppercase tracking-[0.25em] text-white/40 mb-2">For the sake of formality</p>
-            <h3 class="text-2xl sm:text-3xl font-heading font-bold italic text-white leading-tight mb-3 group-hover:text-amber-200 transition-colors duration-300">Resume</h3>
-            <span class="inline-flex items-center gap-2 text-xs font-medium uppercase tracking-wider text-amber-400 group-hover:text-amber-300 transition-colors">
-              Download
-              <svg class="w-3.5 h-3.5 group-hover:translate-y-0.5 transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3"/></svg>
-            </span>
+            <a
+              href="mailto:jmilligan@linkstudio.ai"
+              class="inline-flex items-center gap-2 rounded-full border border-amber-300/25 bg-amber-300/10 px-5 py-3 text-sm font-medium text-amber-100 transition-colors hover:bg-amber-300/15"
+            >
+              Reach out about building with Link
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M7.5 17.25 16.5 8.25M16.5 8.25H9.75m6.75 0V15" /></svg>
+            </a>
           </div>
-        </a>
+        </div>
+
+        <div class="grid gap-4">
+          {linkFocus.map((item, i) => (
+            <div
+              class="rounded-2xl border border-white/6 bg-white/[0.02] p-6 animate-on-scroll"
+              style={`transition-delay: ${0.1 + i * 0.08}s`}
+            >
+              <p class="text-[10px] uppercase tracking-[0.28em] text-amber-300/55 mb-3">{item.title}</p>
+              <p class="text-sm text-white/65 leading-relaxed font-light">{item.body}</p>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   </section>
@@ -389,7 +314,7 @@ const now = [
     <div class="max-w-2xl mx-auto px-4 sm:px-6 text-center animate-on-scroll">
       <h2 class="text-3xl sm:text-4xl font-heading font-bold italic mb-4">Say hello</h2>
       <p class="text-muted mb-8">
-        <a href="mailto:justin.milligan334@gmail.com" class="underline decoration-amber-400/50 hover:decoration-amber-400 underline-offset-4 transition-colors">justin.milligan334@gmail.com</a>
+        <a href="mailto:jmilligan@linkstudio.ai" class="underline decoration-amber-400/50 hover:decoration-amber-400 underline-offset-4 transition-colors">jmilligan@linkstudio.ai</a>
       </p>
       <div class="flex items-center justify-center gap-6">
         {socials.filter(s => s.icon !== 'email').map((s) => (
@@ -433,26 +358,44 @@ const now = [
     transform: translateY(0);
   }
 
-  /* ── Hero gradient-animated name ── */
-  .hero-gradient-name {
-    background: linear-gradient(
-      120deg,
-      #ffffff 0%,
-      #fbbf24 25%,
-      #ffffff 50%,
-      #fbbf24 75%,
-      #ffffff 100%
-    );
-    background-size: 300% 100%;
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    animation: hero-gradient-shift 8s ease-in-out infinite;
+  /* ── Hero name treatment ── */
+  .hero-name {
+    color: rgb(250 247 242 / 0.96);
+    letter-spacing: -0.05em;
+    text-shadow: 0 16px 36px rgb(0 0 0 / 0.24);
   }
-  @keyframes hero-gradient-shift {
-    0%   { background-position: 0% 50%; }
-    50%  { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
+  .hero-name-line {
+    display: block;
+    width: fit-content;
+    margin-inline: auto;
+    position: relative;
+  }
+  .hero-name-line:first-child {
+    transform: translateX(-0.05em);
+  }
+  .hero-name-line--accent {
+    transform: translateX(0.04em);
+    padding-inline: 0.08em;
+  }
+  .hero-name-line--accent::before {
+    content: '';
+    position: absolute;
+    left: 10%;
+    right: 10%;
+    bottom: 0.16em;
+    height: 0.2em;
+    border-radius: 9999px;
+    background: linear-gradient(90deg, transparent, rgb(251 191 36 / 0.18), transparent);
+    filter: blur(7px);
+    z-index: -1;
+  }
+  .hero-name-line--accent::after {
+    content: '';
+    position: absolute;
+    left: 15%;
+    right: 15%;
+    bottom: 0.1em;
+    border-bottom: 1px solid rgb(251 191 36 / 0.35);
   }
 
   /* ── Lightbox active state ── */
@@ -462,11 +405,6 @@ const now = [
   }
   #lightbox.is-active #lightbox-img {
     transform: scale(1);
-  }
-
-  /* ── Photo hover caption overlay needs relative parent ── */
-  .lightbox-trigger {
-    position: relative;
   }
 </style>
 
