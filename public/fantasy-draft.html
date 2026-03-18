@@ -253,7 +253,8 @@ input:focus { border-color: var(--accent-bright); background: rgba(37,99,235,0.0
 
 /* ========== DRAFT SCREEN ========== */
 #draft-screen { justify-content: flex-start; padding-top: 36px; }
-.draft-header { text-align: center; margin-bottom: 20px; }
+.draft-top-bar { display: flex; align-items: center; justify-content: space-between; width: 100%; max-width: 540px; margin-bottom: 18px; }
+.draft-header { text-align: left; }
 .draft-player-name {
   font-family: var(--font-display);
   font-size: 2rem;
@@ -269,6 +270,41 @@ input:focus { border-color: var(--accent-bright); background: rgba(37,99,235,0.0
   letter-spacing: 0.2em;
   color: var(--text-muted);
   margin-top: 6px;
+}
+/* Timer clock */
+.draft-timer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+.draft-timer .timer-label {
+  font-family: var(--font-display);
+  font-size: 0.55rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--text-muted);
+}
+.draft-timer .timer-value {
+  font-family: 'Courier New', monospace;
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: 0.05em;
+  line-height: 1;
+  min-width: 80px;
+  text-align: center;
+  padding: 8px 14px;
+  background: rgba(0,0,0,0.4);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-top: 2px solid var(--accent-bright);
+}
+.draft-timer .timer-value.warning { color: #f59e0b; border-top-color: #f59e0b; }
+.draft-timer .timer-value.danger { color: var(--error); border-top-color: var(--error); animation: timerPulse 1s ease infinite; }
+@keyframes timerPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
 }
 
 .progress-bar-container { width: 100%; max-width: 540px; height: 3px; background: rgba(255,255,255,0.06); margin-bottom: 28px; overflow: hidden; }
@@ -542,6 +578,30 @@ input:focus { border-color: var(--accent-bright); background: rgba(37,99,235,0.0
   100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
 }
 
+/* Time bonus row in reveal */
+.time-bonus-row { display: grid; grid-template-columns: 1fr 50px 1fr; gap: 8px; margin-top: 8px; opacity: 0; transition: opacity 0.5s; }
+.time-bonus-row.visible { opacity: 1; }
+.time-bonus-cell {
+  text-align: center; padding: 10px;
+  background: rgba(245,158,11,0.06);
+  border: 1px solid rgba(245,158,11,0.15);
+  border-left: 3px solid transparent;
+}
+.time-bonus-cell .bonus-label {
+  font-family: var(--font-display); font-size: 0.55rem;
+  text-transform: uppercase; letter-spacing: 0.2em;
+  color: rgba(245,158,11,0.6); margin-bottom: 2px;
+}
+.time-bonus-cell .bonus-time {
+  font-family: 'Courier New', monospace; font-size: 0.75rem;
+  color: var(--text-muted);
+}
+.time-bonus-cell .bonus-pts {
+  font-family: var(--font-display); font-size: 1.1rem; font-weight: 700;
+  color: #f59e0b; margin-top: 2px;
+}
+.time-bonus-cell.has-bonus { border-left-color: #f59e0b; }
+
 .play-again-area { margin-top: 28px; opacity: 0; transition: opacity 0.5s; }
 .play-again-area.visible { opacity: 1; }
 
@@ -620,9 +680,15 @@ input:focus { border-color: var(--accent-bright); background: rgba(37,99,235,0.0
 
 <!-- ========== SCREEN 3: DRAFT ========== -->
 <div id="draft-screen" class="screen">
-  <div class="draft-header">
-    <div class="draft-player-name" id="draft-player-name"></div>
-    <div class="draft-slot-info" id="draft-slot-info"></div>
+  <div class="draft-top-bar">
+    <div class="draft-header">
+      <div class="draft-player-name" id="draft-player-name"></div>
+      <div class="draft-slot-info" id="draft-slot-info"></div>
+    </div>
+    <div class="draft-timer">
+      <div class="timer-label">Time</div>
+      <div class="timer-value" id="draft-timer-display">0:00</div>
+    </div>
   </div>
   <div class="progress-bar-container"><div class="progress-bar-fill" id="progress-fill"></div></div>
   <div class="clue-card" id="clue-card">
@@ -664,6 +730,19 @@ input:focus { border-color: var(--accent-bright); background: rgba(37,99,235,0.0
     <span class="vs-p-name" id="reveal-p2-name"></span>
   </div>
   <div class="reveal-grid" id="reveal-grid"></div>
+  <div class="time-bonus-row" id="time-bonus-row">
+    <div class="time-bonus-cell" id="bonus-p1">
+      <div class="bonus-label">Speed Bonus</div>
+      <div class="bonus-time" id="bonus-p1-time"></div>
+      <div class="bonus-pts" id="bonus-p1-pts"></div>
+    </div>
+    <div style="display:flex;align-items:center;justify-content:center"><span class="vs-divider" style="font-size:0.5rem;padding:3px 8px">⏱</span></div>
+    <div class="time-bonus-cell" id="bonus-p2">
+      <div class="bonus-label">Speed Bonus</div>
+      <div class="bonus-time" id="bonus-p2-time"></div>
+      <div class="bonus-pts" id="bonus-p2-pts"></div>
+    </div>
+  </div>
   <div class="reveal-totals" id="reveal-totals">
     <div class="total-cell" id="total-p1"><div class="total-label">Total</div><div class="total-score" id="total-p1-score">0</div></div>
     <div style="display:flex;align-items:center;justify-content:center"><span class="vs-divider" style="font-size:0.6rem;padding:4px 10px">VS</span></div>
@@ -844,8 +923,77 @@ const GameState = {
   player1Picks: [],
   player2Picks: [],
   player1Scores: [],
-  player2Scores: []
+  player2Scores: [],
+  /* Timer tracking */
+  player1Time: 0,   // total seconds for player 1
+  player2Time: 0,   // total seconds for player 2
+  timerStart: 0,    // timestamp when current turn started
+  timerInterval: null,
+  player1Bonus: 0,
+  player2Bonus: 0
 };
+
+/* ===========================================================
+   DRAFT TIMER
+   =========================================================== */
+
+function startDraftTimer() {
+  GameState.timerStart = Date.now();
+  clearInterval(GameState.timerInterval);
+  GameState.timerInterval = setInterval(updateTimerDisplay, 250);
+  updateTimerDisplay();
+}
+
+function stopDraftTimer() {
+  clearInterval(GameState.timerInterval);
+  const elapsed = Math.round((Date.now() - GameState.timerStart) / 1000);
+  if (GameState.currentPlayer === 1) GameState.player1Time += elapsed;
+  else GameState.player2Time += elapsed;
+}
+
+function updateTimerDisplay() {
+  const elapsed = Math.round((Date.now() - GameState.timerStart) / 1000);
+  const currentTotal = (GameState.currentPlayer === 1 ? GameState.player1Time : GameState.player2Time) + elapsed;
+  const mins = Math.floor(currentTotal / 60);
+  const secs = currentTotal % 60;
+  const el = document.getElementById('draft-timer-display');
+  el.textContent = `${mins}:${secs.toString().padStart(2, '0')}`;
+  // Visual warnings
+  el.classList.remove('warning', 'danger');
+  if (currentTotal >= 180) el.classList.add('danger');       // 3+ min
+  else if (currentTotal >= 120) el.classList.add('warning'); // 2+ min
+}
+
+function formatTime(totalSecs) {
+  const mins = Math.floor(totalSecs / 60);
+  const secs = totalSecs % 60;
+  return `${mins}:${secs.toString().padStart(2, '0')}`;
+}
+
+/* Speed bonus: faster player gets bonus = 5% of slower player's roster score, capped at 150 pts */
+function calculateTimeBonus() {
+  const t1 = GameState.player1Time;
+  const t2 = GameState.player2Time;
+  const rosterTotal1 = GameState.player1Scores.reduce((a, b) => a + b, 0);
+  const rosterTotal2 = GameState.player2Scores.reduce((a, b) => a + b, 0);
+  const avgRoster = (rosterTotal1 + rosterTotal2) / 2;
+
+  if (t1 === t2) {
+    GameState.player1Bonus = 0;
+    GameState.player2Bonus = 0;
+  } else {
+    const timeDiff = Math.abs(t1 - t2);
+    // Bonus scales with time difference: 2pts per second faster, capped at 150
+    const bonus = Math.min(Math.round(timeDiff * 2), 150);
+    if (t1 < t2) {
+      GameState.player1Bonus = bonus;
+      GameState.player2Bonus = 0;
+    } else {
+      GameState.player1Bonus = 0;
+      GameState.player2Bonus = bonus;
+    }
+  }
+}
 
 /* ===========================================================
    SCREEN MANAGEMENT
@@ -938,6 +1086,11 @@ async function startGame() {
   GameState.player2Picks = [];
   GameState.player1Scores = [];
   GameState.player2Scores = [];
+  GameState.player1Time = 0;
+  GameState.player2Time = 0;
+  GameState.player1Bonus = 0;
+  GameState.player2Bonus = 0;
+  clearInterval(GameState.timerInterval);
 
   // loader updated — no sport-specific icons needed
   
@@ -969,12 +1122,13 @@ async function generateClues() {
 RULES:
 1. Return ONLY a valid JSON array. No markdown, no explanation, no backticks.
 2. Generate exactly ${numClues} clue objects (one per roster slot).
-3. Each clue must have 2–3 constraints that intersect interestingly. Mix constraint types: team history, statistical thresholds, draft era, name patterns, championships/awards, active/retired status.
-4. Each clue MUST have between 2 and 6 valid answers from the provided dataset. Before including a clue, verify the count of matching players. If fewer than 2 or more than 6 match, revise the clue.
+3. Each clue must have 2–3 constraints that intersect interestingly. Mix constraint types: team history, statistical thresholds, draft era, name patterns, championships/awards, active/retired status, jersey numbers.
+4. Each clue MUST have between 3 and 6 valid answers from the provided dataset. Before including a clue, verify the count of matching players. If fewer than 3 or more than 6 match, revise the clue. Aim for 3-5 valid answers per clue.
 5. For NBA: each clue's valid answers must all play the position for that slot.
 6. For NFL: QB clue must have QB answers. RB1 and RB2 clues must have RB answers. WR1 and WR2 must have WR or TE answers. FLEX clue can have RB, WR, or TE answers.
-7. Make clues interesting and varied — not trivially easy, not impossibly obscure.
-8. Write clue_text in natural language, like a fun sports broadcast puzzle (e.g. "Name a shooting guard who won at least 2 rings, played in the Western Conference, and whose last name starts before M in the alphabet").
+7. IMPORTANT: Avoid making clues that only the biggest all-time legends can answer. Mix difficulty levels — some clues should favor mid-tier or current-era players, not just obvious GOATs. Use thresholds that include role players and solid starters, not just MVPs and Hall of Famers. For example, use "averaged over 15 PPG" instead of "averaged over 25 PPG". Make at least half the clues answerable by active or 2010s-era players.
+8. Write clue_text in natural language, like a fun sports broadcast puzzle (e.g. "Name a shooting guard drafted after 2005 who played for at least 2 teams and whose last name starts before M in the alphabet").
+9. Vary your constraint types across clues — don't repeat the same pattern. Use team history in one, stats in another, draft era + name letter in another, etc.
 
 JSON format per clue:
 { "slot": "${slots[0]}", "position": "${slots[0]}", "clue_text": "...", "valid_answers": ["Player Name 1", "Player Name 2"] }
@@ -1049,6 +1203,7 @@ function beginDraft() {
   GameState.currentSlotIndex = 0;
   GameState.attempts = 0;
   showScreen('draft-screen');
+  startDraftTimer();
   renderDraftSlot();
 }
 
@@ -1180,6 +1335,7 @@ function advanceSlot() {
    =========================================================== */
 
 function showRosterSummary() {
+  stopDraftTimer();
   const picks = GameState.currentPlayer === 1 ? GameState.player1Picks : GameState.player2Picks;
   const name = GameState.currentPlayer === 1 ? GameState.player1Name : GameState.player2Name;
   document.getElementById('roster-title').textContent = `${name}'s Roster`;
@@ -1218,7 +1374,10 @@ function startPlayer2Turn() {
   GameState.currentPlayer = 2;
   GameState.currentSlotIndex = 0;
   GameState.attempts = 0;
+  document.getElementById('draft-timer-display').textContent = '0:00';
+  document.getElementById('draft-timer-display').classList.remove('warning', 'danger');
   showScreen('draft-screen');
+  startDraftTimer();
   renderDraftSlot();
 }
 
@@ -1300,6 +1459,9 @@ function startReveal() {
     grid.appendChild(row);
   }
 
+  document.getElementById('time-bonus-row').classList.remove('visible');
+  document.getElementById('bonus-p1').classList.remove('has-bonus');
+  document.getElementById('bonus-p2').classList.remove('has-bonus');
   document.getElementById('reveal-totals').classList.remove('visible');
   document.getElementById('total-p1-score').textContent = '0';
   document.getElementById('total-p2-score').textContent = '0';
@@ -1374,12 +1536,29 @@ function animateCounter(elementId, from, to, duration) {
 }
 
 function showTotals() {
-  const t1 = GameState.player1Scores.reduce((a, b) => a + b, 0);
-  const t2 = GameState.player2Scores.reduce((a, b) => a + b, 0);
+  calculateTimeBonus();
 
-  document.getElementById('reveal-totals').classList.add('visible');
-  animateCounter('total-p1-score', 0, t1, 1200);
-  animateCounter('total-p2-score', 0, t2, 1200);
+  // Show time bonus row first
+  const bonusRow = document.getElementById('time-bonus-row');
+  document.getElementById('bonus-p1-time').textContent = formatTime(GameState.player1Time);
+  document.getElementById('bonus-p2-time').textContent = formatTime(GameState.player2Time);
+  document.getElementById('bonus-p1-pts').textContent = GameState.player1Bonus > 0 ? `+${GameState.player1Bonus}` : '—';
+  document.getElementById('bonus-p2-pts').textContent = GameState.player2Bonus > 0 ? `+${GameState.player2Bonus}` : '—';
+  if (GameState.player1Bonus > 0) document.getElementById('bonus-p1').classList.add('has-bonus');
+  if (GameState.player2Bonus > 0) document.getElementById('bonus-p2').classList.add('has-bonus');
+  bonusRow.classList.add('visible');
+
+  // Total = roster + time bonus
+  const roster1 = GameState.player1Scores.reduce((a, b) => a + b, 0);
+  const roster2 = GameState.player2Scores.reduce((a, b) => a + b, 0);
+  const t1 = roster1 + GameState.player1Bonus;
+  const t2 = roster2 + GameState.player2Bonus;
+
+  setTimeout(() => {
+    document.getElementById('reveal-totals').classList.add('visible');
+    animateCounter('total-p1-score', 0, t1, 1200);
+    animateCounter('total-p2-score', 0, t2, 1200);
+  }, 800);
 
   setTimeout(() => {
     if (t1 > t2) document.getElementById('total-p1').classList.add('winner-total');
@@ -1400,7 +1579,7 @@ function showTotals() {
     }
     banner.classList.add('visible');
     document.getElementById('play-again-area').classList.add('visible');
-  }, 1500);
+  }, 2300);
 }
 
 
@@ -1437,6 +1616,11 @@ function playAgain() {
   GameState.player2Picks = [];
   GameState.player1Scores = [];
   GameState.player2Scores = [];
+  GameState.player1Time = 0;
+  GameState.player2Time = 0;
+  GameState.player1Bonus = 0;
+  GameState.player2Bonus = 0;
+  clearInterval(GameState.timerInterval);
   GameState.currentPlayer = 1;
   GameState.currentSlotIndex = 0;
   GameState.attempts = 0;
