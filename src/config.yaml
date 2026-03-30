@@ -1,6 +1,6 @@
 site:
   name: Justin Milligan
-  site: 'https://justinmilligan.vercel.app'
+  site: 'https://justin-milligan.vercel.app'
   base: '/'
   trailingSlash: false
 

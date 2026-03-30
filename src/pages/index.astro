@@ -12,7 +12,6 @@ import photo3 from '~/assets/images/photos/IMG_1659.JPG';
 import photo4 from '~/assets/images/photos/IMG_1708.JPG';
 import photo5 from '~/assets/images/photos/IMG_1782.JPG';
 import photo6 from '~/assets/images/photos/IMG_9492.JPG';
-import resumeBg from '~/assets/images/photos/IMG_1708.JPG';
 
 const metadata = {
   title: 'Justin Milligan',
@@ -85,13 +84,13 @@ const photos = [
       <p class="text-xs uppercase tracking-[0.4em] text-white/50 mb-5 font-sans">
         personal site
       </p>
-      <h1 class="hero-gradient-name text-5xl sm:text-6xl md:text-7xl font-heading font-bold leading-[0.92] mb-10 italic">
+      <h1 class="hero-gradient-name text-5xl sm:text-6xl md:text-7xl font-heading font-bold leading-[0.92] mb-10">
         Justin<br />Milligan
       </h1>
 
       <!-- Currently at badge -->
       <a
-        href="https://www.linkventures.com"
+        href="https://linkventures.com/link-studio"
         target="_blank"
         rel="noopener noreferrer"
         class="inline-flex items-center gap-2.5 px-5 py-2.5 rounded-full border border-white/10 bg-white/5 backdrop-blur-sm hover:bg-white/10 transition-all duration-300 mb-10 group"
@@ -137,11 +136,24 @@ const photos = [
   </section>
 
   <!-- ============================================ -->
+  <!-- ABOUT                                         -->
+  <!-- ============================================ -->
+  <section class="py-20 sm:py-24">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 text-center animate-on-scroll">
+      <p class="text-xs uppercase tracking-[0.3em] text-muted mb-4">About</p>
+      <p class="text-lg sm:text-xl text-default dark:text-white/80 leading-relaxed font-light">
+        Justin is a Senior Venture Associate, building AI-powered tools for portfolio companies and sources founding teams for the studio. He brings work experience in finance at J.P. Morgan Chase and a degree in Economics from Princeton University.
+      </p>
+    </div>
+  </section>
+
+  <!-- ============================================ -->
   <!-- LINK + DOCUMENTS                             -->
   <!-- ============================================ -->
   <section id="work" class="py-20 sm:py-24">
     <div class="max-w-6xl mx-auto px-4 sm:px-6">
       <div class="grid lg:grid-cols-[1.1fr_0.9fr] gap-5 items-stretch">
+        <!-- Link Studio card -->
         <div
           class="relative overflow-hidden rounded-[2rem] border border-white/8 bg-gradient-to-br from-stone-950 via-stone-900 to-black p-8 sm:p-10 animate-on-scroll"
           style="transition-delay: 0s"
@@ -152,7 +164,7 @@ const photos = [
 
           <div class="relative z-10 max-w-xl">
             <p class="text-[10px] uppercase tracking-[0.32em] text-amber-300/60 mb-4">Link Studio</p>
-            <h2 class="text-4xl sm:text-5xl font-heading font-bold italic text-white/95 leading-tight mb-5">
+            <h2 class="text-4xl sm:text-5xl font-heading font-bold text-white/95 leading-tight mb-5">
               Working with AI founders in Cambridge.
             </h2>
             <p class="text-base text-white/65 font-light leading-relaxed max-w-lg mb-8">
@@ -169,23 +181,25 @@ const photos = [
           </div>
         </div>
 
+        <!-- Thesis + Resume cards -->
         <div class="grid sm:grid-cols-2 lg:grid-cols-1 gap-5">
+          <!-- Senior Thesis — abstract gradient background -->
           <a
             href="/files/senior-thesis-justin-milligan.pdf"
             target="_blank"
-            class="group relative overflow-hidden rounded-[1.75rem] min-h-[240px] animate-on-scroll"
+            class="group relative overflow-hidden rounded-[1.75rem] min-h-[240px] border border-white/8 animate-on-scroll"
             style="transition-delay: 0.1s"
           >
-            <Image
-              src={photo2}
-              alt=""
-              class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-              widths={[500, 800]}
-            />
-            <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-black/20"></div>
+            <!-- Abstract gradient background -->
+            <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,_rgba(251,191,36,0.15),_transparent_50%),radial-gradient(ellipse_at_bottom_right,_rgba(168,85,247,0.12),_transparent_50%),linear-gradient(135deg,_rgba(15,15,20,1),_rgba(24,20,30,1))]"></div>
+            <!-- Floating orbs -->
+            <div class="absolute top-6 right-8 h-24 w-24 rounded-full bg-amber-400/8 blur-2xl group-hover:bg-amber-400/14 transition-all duration-700"></div>
+            <div class="absolute bottom-4 left-6 h-20 w-20 rounded-full bg-purple-500/8 blur-2xl group-hover:bg-purple-500/14 transition-all duration-700"></div>
+            <!-- Subtle noise texture -->
+            <div class="absolute inset-0 opacity-[0.04]" style="background-image: linear-gradient(white 1px, transparent 1px), linear-gradient(90deg, white 1px, transparent 1px); background-size: 32px 32px;"></div>
             <div class="relative z-10 flex h-full flex-col justify-end p-7">
               <p class="text-[10px] uppercase tracking-[0.28em] text-white/45 mb-2">Senior Thesis</p>
-              <h3 class="text-2xl font-heading font-bold italic text-white leading-tight mb-3 group-hover:text-amber-200 transition-colors">
+              <h3 class="text-2xl font-heading font-bold text-white leading-tight mb-3 group-hover:text-amber-200 transition-colors">
                 Rethinking the Arc
               </h3>
               <p class="text-xs text-white/55 leading-relaxed mb-5 max-w-sm">
@@ -198,23 +212,23 @@ const photos = [
             </div>
           </a>
 
+          <!-- Resume — abstract gradient background -->
           <a
             href="/files/justin-milligan-resume.docx"
             target="_blank"
-            class="group relative overflow-hidden rounded-[1.75rem] min-h-[240px] animate-on-scroll"
+            class="group relative overflow-hidden rounded-[1.75rem] min-h-[240px] border border-white/8 animate-on-scroll"
             style="transition-delay: 0.18s"
           >
-            <Image
-              src={resumeBg}
-              alt=""
-              class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-              widths={[500, 800]}
-            />
-            <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-black/10"></div>
-            <div class="absolute inset-0 opacity-[0.06]" style="background-image: linear-gradient(white 1px, transparent 1px), linear-gradient(90deg, white 1px, transparent 1px); background-size: 28px 28px;"></div>
+            <!-- Abstract gradient background -->
+            <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_rgba(56,189,248,0.12),_transparent_50%),radial-gradient(ellipse_at_bottom_left,_rgba(52,211,153,0.10),_transparent_50%),linear-gradient(145deg,_rgba(12,15,22,1),_rgba(18,22,30,1))]"></div>
+            <!-- Floating orbs -->
+            <div class="absolute top-8 left-10 h-20 w-20 rounded-full bg-sky-400/8 blur-2xl group-hover:bg-sky-400/14 transition-all duration-700"></div>
+            <div class="absolute bottom-6 right-8 h-24 w-24 rounded-full bg-emerald-400/8 blur-2xl group-hover:bg-emerald-400/14 transition-all duration-700"></div>
+            <!-- Grid texture -->
+            <div class="absolute inset-0 opacity-[0.04]" style="background-image: linear-gradient(white 1px, transparent 1px), linear-gradient(90deg, white 1px, transparent 1px); background-size: 28px 28px;"></div>
             <div class="relative z-10 flex h-full flex-col justify-end p-7">
               <p class="text-[10px] uppercase tracking-[0.28em] text-white/45 mb-2">Resume</p>
-              <h3 class="text-2xl font-heading font-bold italic text-white leading-tight mb-3 group-hover:text-amber-200 transition-colors">
+              <h3 class="text-2xl font-heading font-bold text-white leading-tight mb-3 group-hover:text-amber-200 transition-colors">
                 For the sake of formality
               </h3>
               <p class="text-xs text-white/55 leading-relaxed mb-5 max-w-sm">
@@ -238,7 +252,7 @@ const photos = [
     <div class="max-w-6xl mx-auto px-4 sm:px-6">
       <div class="text-center mb-12 sm:mb-14 animate-on-scroll">
         <p class="text-xs uppercase tracking-[0.3em] text-muted mb-3">Photos</p>
-        <h2 class="text-4xl sm:text-5xl font-heading font-bold italic mb-5">Some of my favorites</h2>
+        <h2 class="text-4xl sm:text-5xl font-heading font-bold mb-5">Some of my favorites</h2>
         <p class="text-base text-muted max-w-md mx-auto font-light leading-relaxed">
           I bought a camera in 2022. I have successfully taken 6 good pictures.
         </p>
@@ -272,7 +286,7 @@ const photos = [
       <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-6 mb-12 animate-on-scroll">
         <div>
           <p class="text-xs uppercase tracking-[0.3em] text-muted mb-3">Apps and tools</p>
-          <h2 class="text-4xl sm:text-5xl font-heading font-bold italic">Things I'm building for fun</h2>
+          <h2 class="text-4xl sm:text-5xl font-heading font-bold">Things I'm building for fun</h2>
         </div>
         <p class="text-base text-muted max-w-md font-light leading-relaxed sm:text-right">
           Some projects for fun.
@@ -288,7 +302,7 @@ const photos = [
           style="transition-delay: 0s"
         >
           <div class="absolute inset-0 opacity-[0.05]" style="background-image: linear-gradient(white 1px, transparent 1px), linear-gradient(90deg, white 1px, transparent 1px); background-size: 34px 34px;"></div>
-          <div class="absolute -right-12 top-8 text-[10rem] font-heading italic leading-none text-white/[0.04] transition-transform duration-700 group-hover:translate-x-[-0.5rem]">W</div>
+          <div class="absolute -right-12 top-8 text-[10rem] font-heading leading-none text-white/[0.04] transition-transform duration-700 group-hover:translate-x-[-0.5rem]">W</div>
           <div class="relative z-10 flex h-full flex-col justify-between">
             <div>
               <span class="inline-flex items-center gap-1.5 rounded-full border border-emerald-400/20 bg-emerald-400/10 px-3 py-1 text-[10px] uppercase tracking-[0.24em] text-emerald-300">
@@ -298,7 +312,7 @@ const photos = [
             </div>
             <div>
               <p class="text-[10px] uppercase tracking-[0.28em] text-white/35 mb-3">Habit tracking</p>
-              <h3 class="text-4xl sm:text-5xl font-heading font-bold italic text-white mb-4">Wish</h3>
+              <h3 class="text-4xl sm:text-5xl font-heading font-bold text-white mb-4">Wish</h3>
               <p class="max-w-md text-sm text-white/60 leading-relaxed mb-6">
                 Track daily habits, mood, and WHOOP data in one place. Built to make the invisible parts of a routine easier to see.
               </p>
@@ -323,7 +337,7 @@ const photos = [
               </span>
               <div>
                 <p class="text-[10px] uppercase tracking-[0.28em] text-white/35 mb-3">Helping make treatment affordable</p>
-                <h3 class="text-3xl font-heading font-bold italic text-white mb-3">PriceRX</h3>
+                <h3 class="text-3xl font-heading font-bold text-white mb-3">PriceRX</h3>
                 <p class="text-sm text-white/60 leading-relaxed">
                   Look up real drug prices using NADAC and Cost Plus Drugs data so the actual numbers are easier to compare.
                 </p>
@@ -346,22 +360,22 @@ const photos = [
               </span>
               <div>
                 <p class="text-[10px] uppercase tracking-[0.28em] text-white/35 mb-3">Two-player trivia game</p>
-                <h3 class="text-3xl font-heading font-bold italic text-white mb-3 group-hover:text-amber-200 transition-colors">Fantasy Draft</h3>
+                <h3 class="text-3xl font-heading font-bold text-white mb-3 group-hover:text-amber-200 transition-colors">Fantasy Draft</h3>
                 <p class="text-sm text-white/60 leading-relaxed">Answer sports clues, build a roster, and see who wins the fantasy matchup.</p>
               </div>
             </div>
           </a>
-          </div>
-        </a>
+        </div>
       </div>
     </div>
   </section>
+
   <!-- ============================================ -->
   <!-- FOOTER / CONNECT                              -->
   <!-- ============================================ -->
   <section class="py-16 sm:py-20 border-t border-gray-200 dark:border-white/5">
     <div class="max-w-2xl mx-auto px-4 sm:px-6 text-center animate-on-scroll">
-      <h2 class="text-3xl sm:text-4xl font-heading font-bold italic mb-4">Say hello</h2>
+      <h2 class="text-3xl sm:text-4xl font-heading font-bold mb-4">Say hello</h2>
       <p class="text-muted mb-8">
         <a href="mailto:jmilligan@linkstudio.ai" class="underline decoration-amber-400/50 hover:decoration-amber-400 underline-offset-4 transition-colors">jmilligan@linkstudio.ai</a>
       </p>
